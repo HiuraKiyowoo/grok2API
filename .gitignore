@@ -1,0 +1,35 @@
+# Binaries
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+package-lock.json
+
+# Build output
+dist/
+frontend/dist/
+
+# Data & Logs
+data/
+logs/
+*.log
+*.pid
+
+# Config secrets
+config.yaml
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
