@@ -37,17 +37,38 @@
 git clone https://github.com/HiuraKiyowoo/grok2API.git
 cd grok2API
 
-# 2. Salin & edit konfigurasi
-cp .env.example .env
-nano .env  # Edit ADMIN_KEY dan PORT (default 8000)
+# 2. Compile backend (Go 1.26+ wajib terinstall)
+cd backend
+go build -trimpath -ldflags="-s -w" -o ../bin/grok2api-backend ./cmd/grok2api
+cd ..
 
-# 3. Jalankan daemon
+# 3. Salin & edit konfigurasi
+cp config.example.yaml config.yaml
+nano config.yaml  # Ganti jwtSecret, credentialEncryptionKey, dan password admin
+
+# 4. (Opsional) Edit .env jika perlu override PORT
+cp .env.example .env
+nano .env
+
+# 5. Jalankan daemon
 chmod +x *.sh
 ./start.sh -d
 
-# 4. Akses dashboard
+# 6. Akses dashboard
 # http://127.0.0.1:8000
+# Login: admin / (password dari config.yaml)
 ```
+
+**Catatan Penting:**
+- Binary `bin/grok2api-backend` **tidak** di-commit ke repo (ada di `.gitignore`), wajib compile manual.
+- Secret di `config.yaml` wajib diganti sebelum start pertama kali:
+  ```bash
+  # Generate JWT secret (min 32 char)
+  openssl rand -hex 32
+  
+  # Generate credential encryption key (base64)
+  openssl rand -base64 32
+  ```
 
 ### Docker
 
