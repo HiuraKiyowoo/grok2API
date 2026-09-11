@@ -30,7 +30,29 @@
 
 ## 📦 Instalasi
 
-### Termux / Linux VPS
+### Quick Install (Termux / Linux VPS)
+
+```bash
+# Install lengkap (frontend + backend) dalam satu perintah
+git clone https://github.com/HiuraKiyowoo/grok2API.git && cd grok2API && \
+cd backend && go build -trimpath -ldflags="-s -w" -o ../bin/grok2api-backend ./cmd/grok2api && cd .. && \
+cd frontend && npm install && npm run build && cd .. && \
+cp config.example.yaml config.yaml && \
+sed -i "s/replace-with-at-least-32-characters/$(openssl rand -hex 32)/" config.yaml && \
+sed -i "s/replace-with-base64-key/$(openssl rand -base64 32)/" config.yaml && \
+sed -i "s/replace-with-a-strong-password/admin123456/" config.yaml && \
+chmod +x *.sh && \
+echo "[✓] Instalasi selesai! Jalankan: ./start.sh -d"
+```
+
+**Login Dashboard:**
+- URL: `http://127.0.0.1:8000`
+- Username: `admin`
+- Password: `admin123456` (ganti di `config.yaml` sebelum production)
+
+---
+
+### Manual Install (Step-by-step)
 
 ```bash
 # 1. Clone repository
@@ -42,13 +64,21 @@ cd backend
 go build -trimpath -ldflags="-s -w" -o ../bin/grok2api-backend ./cmd/grok2api
 cd ..
 
-# 3. Salin & edit konfigurasi
-cp config.example.yaml config.yaml
-nano config.yaml  # Ganti jwtSecret, credentialEncryptionKey, dan password admin
+# 3. Build frontend (Node.js 18+ wajib terinstall)
+cd frontend
+npm install
+npm run build
+cd ..
 
-# 4. (Opsional) Edit .env jika perlu override PORT
-cp .env.example .env
-nano .env
+# 4. Setup konfigurasi
+cp config.example.yaml config.yaml
+
+# Generate secrets
+openssl rand -hex 32     # Copy hasil ini ke jwtSecret
+openssl rand -base64 32  # Copy hasil ini ke credentialEncryptionKey
+
+# Edit config.yaml: ganti jwtSecret, credentialEncryptionKey, dan password admin
+nano config.yaml
 
 # 5. Jalankan daemon
 chmod +x *.sh
@@ -58,17 +88,6 @@ chmod +x *.sh
 # http://127.0.0.1:8000
 # Login: admin / (password dari config.yaml)
 ```
-
-**Catatan Penting:**
-- Binary `bin/grok2api-backend` **tidak** di-commit ke repo (ada di `.gitignore`), wajib compile manual.
-- Secret di `config.yaml` wajib diganti sebelum start pertama kali:
-  ```bash
-  # Generate JWT secret (min 32 char)
-  openssl rand -hex 32
-  
-  # Generate credential encryption key (base64)
-  openssl rand -base64 32
-  ```
 
 ### Docker
 
