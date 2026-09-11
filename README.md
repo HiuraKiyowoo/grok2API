@@ -33,22 +33,21 @@
 ### Quick Install (Termux / Linux VPS)
 
 ```bash
-# Install lengkap (frontend + backend) dalam satu perintah
-git clone https://github.com/HiuraKiyowoo/grok2API.git && cd grok2API && \
-cd backend && go build -trimpath -ldflags="-s -w" -o ../bin/grok2api-backend ./cmd/grok2api && cd .. && \
-cd frontend && npm install && npm run build && cd .. && \
-cp config.example.yaml config.yaml && \
-sed -i "s/replace-with-at-least-32-characters/$(openssl rand -hex 32)/" config.yaml && \
-sed -i "s/replace-with-base64-key/$(openssl rand -base64 32)/" config.yaml && \
-sed -i "s/replace-with-a-strong-password/admin123456/" config.yaml && \
-chmod +x *.sh && \
-echo "[✓] Instalasi selesai! Jalankan: ./start.sh -d"
+# Clone & install otomatis
+git clone https://github.com/HiuraKiyowoo/grok2API.git
+cd grok2API
+./install.sh
+
+# Start server
+./start.sh -d
 ```
 
-**Login Dashboard:**
+**Dashboard:**
 - URL: `http://127.0.0.1:8000`
 - Username: `admin`
-- Password: `admin123456` (ganti di `config.yaml` sebelum production)
+- Password: `admin123456`
+
+⚠️ **Ganti password di `config.yaml` sebelum production!**
 
 ---
 
