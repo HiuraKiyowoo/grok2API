@@ -194,6 +194,7 @@ export function AppShell() {
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="h-8"><Languages />{t("shell.language")}</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
+              <DropdownMenuItem onClick={() => void i18n.changeLanguage("id")}>Bahasa Indonesia</DropdownMenuItem>
               <DropdownMenuItem onClick={() => void i18n.changeLanguage("zh-CN")}>简体中文</DropdownMenuItem>
               <DropdownMenuItem onClick={() => void i18n.changeLanguage("en")}>English</DropdownMenuItem>
             </DropdownMenuSubContent>

@@ -7,7 +7,7 @@ services:
     ports:
       - "${GROK2API_PORT:-8000}:8000"
     environment:
-      TZ: "${TZ:-Asia/Shanghai}"
+      TZ: "${TZ:-Asia/Jakarta}"
     volumes:
       - "${GROK2API_CONFIG:-./config.yaml}:/run/grok2api/config.yaml:ro"
       - grok2api-data:/app/data
@@ -17,8 +17,8 @@ services:
     security_opt:
       - no-new-privileges:true
 
-  # 如果出口 IP 不干净，可取消以下注释使用 WARP 作为落地代理。
-  # 启用后，在管理端“设置 -> 出口代理”中新增 socks5://warp:1080。
+  # Jika IP keluar bermasalah, aktifkan layanan WARP di bawah ini sebagai proxy.
+  # Setelah aktif, tambahkan socks5://warp:1080 melalui Pengaturan -> Proxy keluar.
   # warp:
   #   container_name: warp
   #   image: caomingjun/warp:latest

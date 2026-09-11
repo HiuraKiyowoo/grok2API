@@ -15,7 +15,27 @@ const ModelsPage = lazyNamed(() => import("@/features/models/models-page"), "Mod
 const SettingsPage = lazyNamed(() => import("@/features/settings/settings-page"), "SettingsPage");
 
 function lazyNamed<T extends Record<K, ComponentType>, K extends keyof T>(loader: () => Promise<T>, exportName: K): LazyExoticComponent<T[K]> {
-  return lazy(async () => ({ default: (await loader())[exportName] }));
+  return lazy(async () => {
+    try {
+      const module = await loader();
+      if (typeof window !== "undefined") window.sessionStorage.removeItem("grok2api:chunk-reload");
+      return { default: module[exportName] };
+    } catch (error) {
+      // Setelah deployment, browser kadang masih menyimpan manifest lama dan
+      // gagal mengambil chunk halaman baru. Pulihkan otomatis sekali, sehingga
+      // pengguna tidak perlu menekan refresh secara manual.
+      if (typeof window !== "undefined") {
+        const reloadKey = "grok2api:chunk-reload";
+        if (!window.sessionStorage.getItem(reloadKey)) {
+          window.sessionStorage.setItem(reloadKey, "1");
+          window.location.reload();
+          return new Promise<never>(() => undefined);
+        }
+        window.sessionStorage.removeItem(reloadKey);
+      }
+      throw error;
+    }
+  });
 }
 
 function DeferredPage({ page: Page }: { page: ComponentType }) {
